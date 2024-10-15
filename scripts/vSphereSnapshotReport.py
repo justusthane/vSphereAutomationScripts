@@ -15,7 +15,7 @@ try:
     client.sendall(message.encode())
 
     response = client.recv(1024)
-    subprocess.run(['./vSphereSnapshotReport.ps1', '-password', response])
+    subprocess.run(['/usr/local/bin/vSphereSnapshotReport.ps1', '-password', response])
 
     client.close()
 except ConnectionRefusedError:
