@@ -1,0 +1,13 @@
+# Generates and emails list of vSphere snapshots
+# by Justus Grunow, 2024
+
+[Unit]
+Description=vSphere Snapshot Report
+Requires=vSphereSnapshotReport.service
+
+[Timer]
+Unit=vSphereSnapshotReport.service
+OnCalendar=*-*-* *:*:00
+
+[Install]
+WantedBy=timers.target

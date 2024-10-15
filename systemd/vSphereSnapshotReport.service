@@ -1,0 +1,12 @@
+# Generates and emails list of vSphere snapshots
+# by Justus Grunow, 2024
+
+[Unit]
+Description=vSphere Snapshot Report
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/vSphereSnapshotReport.py
+
+[Install]
+WantedBy=multi-user.target
