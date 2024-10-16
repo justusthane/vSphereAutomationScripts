@@ -7,5 +7,5 @@ systemctl enable vSphereAutomationCredentialServer.service
 systemctl start vSphereAutomationCredentialServer.service
 systemctl enable vSphereSnapshotReport.timer
 systemctl start vSphereSnapshotReport.timer
-#systemctl enable vSpherePriorityVMsDRSGroup.timer
-#systemctl start vSpherePriorityVMsDRSGroup.timer
+systemctl enable vSpherePriorityVMsDRSGroup.timer
+systemctl start vSpherePriorityVMsDRSGroup.timer
