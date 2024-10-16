@@ -1,0 +1,13 @@
+# Updates Priority VMs DRS group based on resource pool memberships
+# by Justus Grunow, 2024
+
+[Unit]
+Description=Update vSphere Priority VMs DRS group
+Requires=vSpherePriorityVMsDRSGroup.service
+
+[Timer]
+Unit=vSpherePriorityVMsDRSGroup.service
+OnCalendar=*-*-* *:0/2:00
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,14 @@
+# Updates Priority VMs DRS group based on resource pool memberships
+# by Justus Grunow, 2024
+
+[Unit]
+Description=Update vSphere Priority VMs DRS group
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+ExecStart=/usr/local/bin/vSpherePriorityVMsDRSGroup.py
+
+[Install]
+WantedBy=multi-user.target
