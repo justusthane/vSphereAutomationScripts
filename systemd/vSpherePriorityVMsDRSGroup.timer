@@ -7,7 +7,7 @@ Requires=vSpherePriorityVMsDRSGroup.service
 
 [Timer]
 Unit=vSpherePriorityVMsDRSGroup.service
-OnCalendar=*-*-* *:0/2:00
+OnCalendar=*-*-* *:0/10:00
 
 [Install]
 WantedBy=timers.target
