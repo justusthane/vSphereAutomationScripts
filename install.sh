@@ -1,18 +1,21 @@
 #!/bin/bash
 set -euo pipefail
-cp scripts/* /usr/local/bin/
-cp systemd/* /etc/systemd/system/
-if [ ! -d /etc/systemd/system/vSphereSnapshotReport.service.d ]; then
-	mkdir -p /etc/systemd/system/vSphereSnapshotReport.service.d;
+if [ ! -d /usr/local/bin/vsphereAutomation ]; then
+	mkdir -p /usr/local/bin/vsphereAutomation;
 fi
-cat << EOF > /etc/systemd/system/vSphereSnapshotReport.service.d/override.conf
+cp scripts/* /usr/local/bin/vsphereAutomation/
+cp systemd/* /etc/systemd/system/
+if [ ! -d /etc/systemd/system/vsphereSnapshotReport.service.d ]; then
+	mkdir -p /etc/systemd/system/vsphereSnapshotReport.service.d;
+fi
+cat << EOF > /etc/systemd/system/vsphereSnapshotReport.service.d/override.conf
 [Service]
 Environment="USERNAME=$1"
 EOF
 systemctl daemon-reload
-systemctl enable vSphereAutomationCredentialServer.service
-systemctl start vSphereAutomationCredentialServer.service
-systemctl enable vSphereSnapshotReport.timer
-systemctl start vSphereSnapshotReport.timer
-systemctl enable vSpherePriorityVMsDRSGroup.timer
-systemctl start vSpherePriorityVMsDRSGroup.timer
+systemctl enable vsphereAutomationCredentialServer.service
+systemctl start vsphereAutomationCredentialServer.service
+systemctl enable vsphereSnapshotReport.timer
+systemctl start vsphereSnapshotReport.timer
+systemctl enable vsphereDRSGroupMgmt.timer
+systemctl start vsphereDRSGroupMgmt.timer

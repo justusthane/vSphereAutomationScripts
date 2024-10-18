@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+import sys
 import socket
 import os
 import subprocess
@@ -15,13 +16,13 @@ try:
     client.sendall(message.encode())
 
     response = client.recv(1024)
-    subprocess.run(['/usr/local/bin/vSpherePriorityVMsDRSGroup.ps1', '-password', response])
+    subprocess.run(['/usr/local/bin/vsphereAutomation/snapshotReport.ps1', '-user', sys.argv[1], '-password', response])
 
     client.close()
 except ConnectionRefusedError:
     print('Could not connect to credential server')
     msg = EmailMessage()
-    msg.set_content(f'Credentials needed to run vSphere Priority VMs DRS group script. Please SSH to {socket.gethostname()} and run systemd-tty-ask-password-agent to specify password')
+    msg.set_content(f'Credentials needed to run VMware snapshot report. Please SSH to {socket.gethostname()} and run systemd-tty-ask-password-agent to specify password')
     msg['Subject'] = f'Password needed'
     msg['From'] = f'{socket.gethostname()}@confederationc.on.ca'
     msg['To'] = 'jbadergr@confederationcollege.ca'
