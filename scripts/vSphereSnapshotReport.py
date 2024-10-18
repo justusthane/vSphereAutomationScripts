@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+import sys
 import socket
 import os
 import subprocess
@@ -15,7 +16,7 @@ try:
     client.sendall(message.encode())
 
     response = client.recv(1024)
-    subprocess.run(['/usr/local/bin/vSphereSnapshotReport.ps1', '-password', response])
+    subprocess.run(['/usr/local/bin/vSphereSnapshotReport.ps1', '-user', sys.argv[1], '-password', response])
 
     client.close()
 except ConnectionRefusedError:

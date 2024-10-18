@@ -8,7 +8,7 @@ Description=vSphere Snapshot Report
 Type=oneshot
 User=root
 Group=root
-ExecStart=/usr/local/bin/vSphereSnapshotReport.py
+ExecStart=/usr/local/bin/vSphereSnapshotReport.py ${USERNAME}
 
 [Install]
 WantedBy=multi-user.target
