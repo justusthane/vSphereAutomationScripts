@@ -1,8 +1,11 @@
 #! /usr/bin/env python
+import sys
 import socket
 import os
 import atexit
 import subprocess
+
+username = sys.argv[1]
 
 def on_exit():
     print('Closing server')
@@ -11,7 +14,7 @@ def on_exit():
 atexit.register(on_exit)
 
 socket_path = '/run/credentialServer.sock'
-password = subprocess.getoutput('systemd-ask-password --timeout 0 "Please enter the password for techutils@vpshere.local"')
+password = subprocess.getoutput(f'systemd-ask-password --timeout 0 "Please enter the password for {username}"')
 
 try:
     os.unlink(socket_path)
