@@ -2,7 +2,7 @@
 param (
 [string]$password
 )
-$emailFrom = "techutils-shu@confederationc.on.ca"
+$emailFrom = "$([Environment]::MachineName)@confederationc.on.ca"
 $emailTo = "jbadergr@confederationcollege.ca"
 $smtpServer = "mail.confederationc.on.ca"
 
@@ -11,7 +11,7 @@ try {
   connect-viserver cc-vmcentre.confederationc.on.ca -user "$user" -pass "$password" -Force -ErrorAction Stop
 }
 catch {
-  Send-MailMessage -SmtpServer $smtpServer -to $emailto -from $emailFrom -subject "Error: vSphere Automation DRS group management" -body "Invalid credentials provided for vSphere. Please SSH to techutils-shu and run systemctl restart vsphereAutomationCredentialServer to correct credentials."
+  Send-MailMessage -SmtpServer $smtpServer -to $emailto -from $emailFrom -subject "Error: vSphere Automation DRS group management" -body "Invalid credentials provided for vSphere. Please SSH to $([Environment]::MachineName) and run systemctl restart vsphereAutomationCredentialServer to correct credentials."
   Throw $Error
 }
 $priorityVMs = get-resourcepool -Name "Production (0 - VIP)","Production (1 - Gold)","Production (2 - Silver)" | VMware.VimAutomation.Core\get-vm

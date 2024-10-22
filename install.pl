@@ -8,7 +8,8 @@ open(my $fh_log, ">>", "install.log");
 
 $script_dest = '/usr/local/bin/vsphereAutomation';
 $systemd_dest = '/etc/systemd/system';
-$systemd_override_dir = "$systemd_dest/vsphereSnapshotReport.service.d";
+$snapshotReport_systemd_override = "$systemd_dest/vsphereSnapshotReport.service.d";
+$credentialServer_systemd_override = "$systemd_dest/vsphereAutomationCredentialServer.service.d";
 
 sub get_date {
 	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
@@ -44,20 +45,27 @@ if (! -d $script_dest) {
 	log_line("Creating directory $script_dest");
 	mkdir $script_dest;
 }
-if (! -d $systemd_override_dir) {
-	log_line("Creating directory $systemd_override_dir");
-	mkdir $systemd_override_dir;
+if (! -d $snapshotReport_systemd_override) {
+	log_line("Creating directory $snapshotReport_systemd_override");
+	mkdir $snapshotReport_systemd_override;
 }
 
 install_files(dir => "scripts", dest => $script_dest, chmod => "true");
 install_files(dir => "systemd", dest => $systemd_dest);
 
 
-open(my $fh_systemd_override, ">", "$systemd_override_dir/override.conf");
-print $fh_systemd_override <<"EOF";
+open(my $fh_snapshotReport_systemd_override, ">", "$snapshotReport_systemd_override/override.conf");
+print $fh_snapshotReport_systemd_override <<"EOF";
 [Service]
 Environment=\"USERNAME=$ARGV[0]\"
 EOF
+undef $fh_snapshotReport_systemd_override;
+open(my $fh_credentialServer_systemd_override, ">", "$credentialServer_systemd_override/override.conf");
+print $fh_credentialServer_systemd_override <<"EOF";
+[Service]
+Environment=\"USERNAME=$ARGV[0]\"
+EOF
+undef $fh_credentialServer_systemd_override;
 system("systemctl daemon-reload");
 system("systemctl enable vsphereAutomationCredentialServer.service");
 system("systemctl start vsphereAutomationCredentialServer.service");
@@ -65,5 +73,4 @@ system("systemctl enable vsphereSnapshotReport.timer");
 system("systemctl start vsphereSnapshotReport.timer");
 system("systemctl enable vsphereDRSGroupMgmt.timer");
 system("systemctl start vsphereDRSGroupMgmt.timer");
-undef $fh_systemd_override;
 undef $fh_log;
