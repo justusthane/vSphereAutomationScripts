@@ -1,5 +1,6 @@
 #!/usr/bin/pwsh
 param (
+[string]$user,
 [string]$password
 )
 $emailFrom = "$([Environment]::MachineName)@confederationc.on.ca"
