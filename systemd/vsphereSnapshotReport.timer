@@ -3,10 +3,10 @@
 
 [Unit]
 Description=vSphere Snapshot Report
-Requires=vSphereSnapshotReport.service
+Requires=vsphereSnapshotReport.service
 
 [Timer]
-Unit=vSphereSnapshotReport.service
+Unit=vsphereSnapshotReport.service
 OnCalendar=*-*-* *:*:00
 
 [Install]
