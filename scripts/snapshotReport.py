@@ -7,6 +7,7 @@ import smtplib
 from email.message import EmailMessage
 
 socket_path = '/run/credentialServer.sock'
+username = sys.argv[1]
 
 client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 try:
@@ -16,7 +17,7 @@ try:
     client.sendall(message.encode())
 
     response = client.recv(1024)
-    subprocess.run(['/usr/local/bin/vsphereAutomation/snapshotReport.ps1', '-user', sys.argv[1], '-password', response])
+    subprocess.run(['/usr/local/bin/vsphereAutomation/snapshotReport.ps1', '-user', username, '-password', response])
 
     client.close()
 except ConnectionRefusedError:
