@@ -3,10 +3,10 @@
 
 [Unit]
 Description=Update vSphere Priority VMs DRS group
-Requires=vSpherePriorityVMsDRSGroup.service
+Requires=vsphereDRSGroupMgmt.service
 
 [Timer]
-Unit=vSpherePriorityVMsDRSGroup.service
+Unit=vsphereDRSGroupMgmt.service
 OnCalendar=*-*-* *:0/10:00
 
 [Install]
