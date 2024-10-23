@@ -14,7 +14,7 @@ Requests and serves the password used to connect to vSphere, used by the other s
 1. Log in as root user
 2. [Install PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/install-rhel?view=powershell-7.4)
 3. Run `pwsh -C "install-module -scope CurrentUser VMware.PowerCLI"
-4. Clone this repo and `cd` into it
+4. Clone this repo (`git clone https://cc-gitlab.confederationcollege.ca/techservices/vsphereautomationscripts`) and `cd` into it
 5. `cp CONFIG.ini.default CONFIG.ini`
 6. Edit "CONFIG.ini" to specify options
   - "vsphere_user" must be a user in vSphere with the necessary privileges to perform the necessary tasks - currently requires the Host -> Inventory -> Modify Cluster privilege, required to manage DRS groups ([as documented here](https://tekhead.it/blog/2015/06/assigning-vcenter-permissions-for-drs-affinity-rules/)).
