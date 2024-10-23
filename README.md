@@ -17,13 +17,13 @@ Requests and serves the password used to connect to vSphere, used by the other s
 4. Clone this repo (`git clone https://cc-gitlab.confederationcollege.ca/techservices/vsphereautomationscripts`) and `cd` into it
 5. `cp CONFIG.ini.default CONFIG.ini`
 6. Edit "CONFIG.ini" to specify options
-  - "vsphere_user" must be a user in vSphere with the necessary privileges to perform the necessary tasks - currently requires the Host -> Inventory -> Modify Cluster privilege, required to manage DRS groups ([as documented here](https://tekhead.it/blog/2015/06/assigning-vcenter-permissions-for-drs-affinity-rules/)).
-7. Run `./install.pl`
+    - "vsphere_user" must be a user in vSphere with the necessary privileges to perform the necessary tasks - currently requires the Host -> Inventory -> Modify Cluster privilege, required to manage DRS groups ([as documented here](https://tekhead.it/blog/2015/06/assigning-vcenter-permissions-for-drs-affinity-rules/)).
+7. Run `./install`
 
 The install script copies all the necessary files (systemd services and scripts), and enables and starts the systemd timers.
 
 ## Updating
-Simply pull the repo again (`git pull`) and re-run `./install.pl`. Your customized CONFIG.ini file will not be overwritten.
+Simply pull the repo again (`git pull`) and re-run `./install`. Your customized CONFIG.ini file will not be overwritten.
 
 ## Usage
 Because the password for the vSphere user is only stored in memory, after the server is rebooted (or the vsphereAutomationCredentialServer systemd server is restarted) the password must be re-entered.
@@ -58,4 +58,8 @@ A goal of this project was to not store the password on disk. Instead, the crede
 
 Once a user provides the password, the credential server opens a Unix socket at /run/credentialServer.sock, which provides the password when requested by the Python wrapper scripts during each of their scheduled executions.
 
-Configurable options are specified in the CONFIG.ini file. During installation, install.pl reads this file and creates systemd override files for each service which pass the options to their corresponding systemd service as environment variables. The systemd services in turn pass the options to the scripts they call as arguments.
+Configurable options are specified in the CONFIG.ini file. During installation `/install` reads this file and creates systemd override files for each service which pass the options to their corresponding systemd service as environment variables. The systemd services in turn pass the options to the scripts they call as arguments.
+
+The installer (`./install`) is just `install.pl` packaged as a binary using [pp - PAR Packager](https://metacpan.org/pod/pp). This is necessary because the script uses some third-party modules, and the easiest way to deal with this is to package it all up using pp.
+
+Once pp is installed, packaging the installer is as simple as `pp -o install install.pl`. The modules used are also present in the `modules` directory, but this is just for development.
