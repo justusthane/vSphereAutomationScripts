@@ -60,6 +60,8 @@ Once a user provides the password, the credential server opens a Unix socket at 
 
 Configurable options are specified in the CONFIG.ini file. During installation `/install` reads this file and creates systemd override files for each service which pass the options to their corresponding systemd service as environment variables. The systemd services in turn pass the options to the scripts they call as arguments.
 
+The meat of the installation consists of copying the systemd files and associated scripts to the proper locations on the filesystem (/etc/systemd/system and /usr/local/bin/vsphereAutomation).
+
 The installer (`./install`) is just `install.pl` packaged as a binary using [pp - PAR Packager](https://metacpan.org/pod/pp). This is necessary because the script uses some third-party modules, and the easiest way to deal with this is to package it all up using pp.
 
 Once pp is installed, packaging the installer is as simple as `pp -o install install.pl`. The modules used are also present in the `modules` directory, but this is just for development.
