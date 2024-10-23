@@ -25,6 +25,7 @@ except OSError:
 server = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 
 server.bind(socket_path)
+os.chmod(socket_path, 0o700)
 
 server.listen(1)
 while True:
