@@ -1,16 +1,16 @@
 #!/bin/perl
+# Load modules from within project directory
+use lib qw(modules/share/perl5/5.32); 
 use File::Copy;
 use feature 'signatures';
 use POSIX;
-die "Error: must pass username as argument" if (! $ARGV[0]);
+use Config::Tiny;
 
+my $config = Config::Tiny->read('CONFIG.ini');
 open(my $fh_log, ">>", "install.log");
 
 $script_dest = '/usr/local/bin/vsphereAutomation';
 $systemd_dest = '/etc/systemd/system';
-$snapshotReport_systemd_override = "$systemd_dest/vsphereSnapshotReport.service.d";
-$DRSGroupMgmt_systemd_override = "$systemd_dest/vsphereDRSGroupMgmt.service.d";
-$credentialServer_systemd_override = "$systemd_dest/vsphereAutomationCredentialServer.service.d";
 
 sub get_date {
 	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
@@ -23,7 +23,6 @@ sub log_line {
 	print $fh_log strftime "%Y-%m-%d %H:%M:%S ", localtime time;
 	print $fh_log "$_[0]\n";
 }
-
 
 sub install_files {
 	my (%args) = @_;
@@ -41,42 +40,41 @@ sub install_files {
 	chdir "..";
 }
 
+sub create_systemd_override {
+  my $service_name = $_[0];
+  my $override_dir = "${systemd_dest}/${service_name}.service.d";
+  my $config_vsphere_user = $config->{_}->{vsphere_user};
+  my $config_vsphere_address = $config->{_}->{vsphere_address};
+  my $config_smtp_server = $config->{_}->{smtp_server};
+  my $config_email_from = $config->{_}->{email_from};
+  my $config_email_to = $config->{_}->{email_to};
+
+  if (! -d "$override_dir") {
+    log_line("Creating directory $override_dir");
+    mkdir "$override_dir";
+  }
+  open(my $fh, ">", "$override_dir/override.conf");
+  print $fh <<"EOF";
+[Service]
+Environment=\"VSPHERE_USERNAME=$config_vsphere_user\"
+Environment=\"VSPHERE_ADDRESS=$config_vsphere_address\"
+Environment=\"SMTP_SERVER=$config_smtp_server\"
+Environment=\"EMAIL_FROM=$config_email_from\"
+Environment=\"EMAIL_TO=$config_email_to\"
+EOF
+  undef $fh;
+}
 
 if (! -d $script_dest) {
 	log_line("Creating directory $script_dest");
 	mkdir $script_dest;
 }
-if (! -d $snapshotReport_systemd_override) {
-	log_line("Creating directory $snapshotReport_systemd_override");
-	mkdir $snapshotReport_systemd_override;
-}
-if (! -d $DRSGroupMgmt_systemd_override) {
-	log_line("Creating directory $DRSGroupMgmt_systemd_override");
-	mkdir $DRSGroupMgmt_systemd_override;
-}
 
 install_files(dir => "scripts", dest => $script_dest, chmod => "true");
 install_files(dir => "systemd", dest => $systemd_dest);
-
-
-open(my $fh_snapshotReport_systemd_override, ">", "$snapshotReport_systemd_override/override.conf");
-print $fh_snapshotReport_systemd_override <<"EOF";
-[Service]
-Environment=\"USERNAME=$ARGV[0]\"
-EOF
-undef $fh_snapshotReport_systemd_override;
-open(my $fh_DRSGroupMgmt_systemd_override, ">", "$DRSGroupMgmt_systemd_override/override.conf");
-print $fh_DRSGroupMgmt_systemd_override <<"EOF";
-[Service]
-Environment=\"USERNAME=$ARGV[0]\"
-EOF
-undef $fh_DRSGroupMgmt_systemd_override;
-open(my $fh_credentialServer_systemd_override, ">", "$credentialServer_systemd_override/override.conf");
-print $fh_credentialServer_systemd_override <<"EOF";
-[Service]
-Environment=\"USERNAME=$ARGV[0]\"
-EOF
-undef $fh_credentialServer_systemd_override;
+create_systemd_override("vsphereAutomationCredentialServer");
+create_systemd_override("vsphereDRSGroupMgmt");
+create_systemd_override("vsphereSnapshotReport");
 system("systemctl daemon-reload");
 system("systemctl enable vsphereAutomationCredentialServer.service");
 system("systemctl start vsphereAutomationCredentialServer.service");
