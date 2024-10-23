@@ -26,7 +26,7 @@ The install script copies all the necessary files (systemd services and scripts)
 Simply pull the repo again (`git pull`) and re-run `./install`. Your customized CONFIG.ini file will not be overwritten.
 
 ## Usage
-Because the password for the vSphere user is only stored in memory, after the server is rebooted (or the vsphereAutomationCredentialServer systemd server is restarted) the password must be re-entered.
+Mostly it should just run by itself. Because the password for the vSphere user is only stored in memory, after the server is rebooted (or the vsphereAutomationCredentialServer systemd server is restarted) the password must be re-entered.
 
 To do this, SSH to the server and run `systemd-tty-ask-password-agent` to respond to the pending password request.
 
@@ -49,6 +49,11 @@ The scheduled tasks will resume next time the server is rebooted (or when the ti
 - `systemctl disable vsphereSnapshotReport.timer`
 - `systemctl disable vsphereDRSGroupMgmt.timer`
 
+### Other helpful commands
+
+#### Show systemd timer statuses
+`systemctl list-timers`
+
 ## Technical Details
 
 ### Overview
@@ -65,3 +70,6 @@ The meat of the installation consists of copying the systemd files and associate
 The installer (`./install`) is just `install.pl` packaged as a binary using [pp - PAR Packager](https://metacpan.org/pod/pp). This is necessary because the script uses some third-party modules, and the easiest way to deal with this is to package it all up using pp.
 
 Once pp is installed, packaging the installer is as simple as `pp -o install install.pl`. The modules used are also present in the `modules` directory, but this is just for development.
+
+## Known Issues
+- [Every time the PowerShell scripts run they print a lot of ugly messages to journalctl](https://cc-gitlab.confederationcollege.ca/techservices/vsphereautomationscripts/-/issues/9). This does not impact the operation though.
