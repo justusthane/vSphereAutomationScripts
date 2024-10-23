@@ -1,15 +1,15 @@
 #!/usr/bin/pwsh
 param (
-[string]$user,
+[string]$vsphereUsername,
+[string]$vsphereAddress,
+[string]$smtpServer,
+[string]$emailFrom,
+[string]$emailTo,
 [string]$password
 )
-$emailFrom = "$([Environment]::MachineName)@confederationc.on.ca"
-$emailTo = "jbadergr@confederationcollege.ca"
-$smtpServer = "mail.confederationc.on.ca"
-
 Import-Module VMware.VimAutomation.Core -WarningAction SilentlyContinue
 try {
-  connect-viserver cc-vmcentre.confederationc.on.ca -user "$user" -pass "$password" -Force -ErrorAction Stop
+  connect-viserver $vsphereAddress -user "$vsphereUsername" -pass "$password" -Force -ErrorAction Stop
 }
 catch {
   Send-MailMessage -SmtpServer $smtpServer -to $emailto -from $emailFrom -subject "Error: VMware Snapshot Report" -body "Invalid credentials provided for vSphere. Please SSH to $([Environment]::MachineName) and run systemctl restart vsphereAutomationCredentialServer to correct credentials."

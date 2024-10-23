@@ -1,0 +1,22 @@
+=head2 Wed Oct 23 13:14:54 2024: C<Module> L<Config::Tiny|Config::Tiny>
+
+=over 4
+
+=item *
+
+C<installed into: /root/vSphereAutomationScripts/modules/Config-Tiny/share/perl5/5.32>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.30>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+

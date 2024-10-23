@@ -8,7 +8,12 @@ Description=Update vSphere Priority VMs DRS group
 Type=oneshot
 User=root
 Group=root
-ExecStart=/usr/local/bin/vsphereAutomation/DRSGroupMgmt.py ${USERNAME}
+ExecStart=/usr/local/bin/vsphereAutomation/DRSGroupMgmt.py \
+  ${VSPHERE_USERNAME} \
+  ${VSPHERE_ADDRESS} \
+  ${SMTP_SERVER} \
+  ${EMAIL_FROM} \
+  ${EMAIL_TO}
 
 [Install]
 WantedBy=multi-user.target
