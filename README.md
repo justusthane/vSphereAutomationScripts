@@ -76,7 +76,7 @@ Once pp is installed, packaging the installer is as simple as `pp -o install ins
 
 ### Project structure & file descriptions
 - `CONFIG.ini.default`: Contains default configuration files. This must be manually copied and renamed to "CONFIG.ini", which is then read by the installer.
-- `install`: Used to install/update the project. This is a binary version of `install.source.pl`, packaged using the "pp Perl Packer" and contains any prerequisite Perl modules used by the installer.
+- `install`: Used to install/update the project. This is a binary version of `install.source.pl`, packaged using "pp - PAR Packer" and contains any prerequisite Perl modules used by the installer.
 - `install.source.pl`: Source code for the installer. Although this can be used directly (instead of `./install`), any prerequisite Perl modules must be manually installed first.
 - `modules`: Contains Perl dependencies used by the installer. These are not used once the project is installed, as the dependencies are all packaged into the binary `./install` installer. This is only present for development purposes.
 - `scripts`: Contains the scripts that do all the actual work. During installation, these get copied to their install destination, probably /usr/local/bin/vsphereAutomaton/.
