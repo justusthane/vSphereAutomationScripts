@@ -51,6 +51,9 @@ The scheduled tasks will resume next time the server is rebooted (or when the ti
 
 ### Other helpful commands
 
+#### Show logs for service
+`journalctl -xeu <service_name>`
+
 #### Show systemd timer statuses
 `systemctl list-timers`
 
