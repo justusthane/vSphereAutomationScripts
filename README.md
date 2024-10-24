@@ -79,7 +79,7 @@ Once pp is installed, packaging the installer is as simple as `pp -o install ins
 - `install`: Used to install/update the project. This is a binary version of `install.source.pl`, packaged using "pp - PAR Packer" and contains any prerequisite Perl modules used by the installer.
 - `install.source.pl`: Source code for the installer. Although this can be used directly (instead of `./install`), any prerequisite Perl modules must be manually installed first.
 - `modules`: Contains Perl dependencies used by the installer. These are not used once the project is installed, as the dependencies are all packaged into the binary `./install` installer. This is only present for development purposes.
-- `scripts`: Contains the scripts that do all the actual work. During installation, these get copied to their install destination, probably /usr/local/bin/vsphereAutomaton/.
+- `scripts`: Contains the scripts that do all the actual work. During installation, these get copied to their install destination, probably /usr/local/bin/vsphereAutomation/.
     - `DRSGroupMgmt.ps1`: PowerShell script which performs the automated DRS group management. This gets called by `DRSGroupMgmt.py`.
     - `DRSGroupMgmt.py`: Wrapper script which retrieves credentials from the *vsphereAutomationCredentialServer* service and then calls `DRSGroupMgmt.ps1`.
     - `credentialServer.py`: Runs as a systemd service. Requests a password from the user at start, and then services the password when requested via a Unix socket.
@@ -95,4 +95,4 @@ Once pp is installed, packaging the installer is as simple as `pp -o install ins
 - `test.py`: Used for testing python code, not important to the project.
 
 ## Known Issues
-- [Every time the PowerShell scripts run they print a lot of ugly messages to journalctl](https://cc-gitlab.confederationcollege.ca/techservices/vsphereautomationscripts/-/issues/9). This does not impact the operation though.
+- [Every time the PowerShell scripts run they print a lot of ugly messages to journalctl](https://cc-gitlab.confederationcollege.ca/techservices/vsphereautomationscripts/-/issues/9). This does not impact the operation.
