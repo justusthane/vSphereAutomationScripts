@@ -74,5 +74,25 @@ The installer (`./install`) is just `install.source.pl` packaged as a binary usi
 
 Once pp is installed, packaging the installer is as simple as `pp -o install install.source.pl`. The modules used are also present in the `modules` directory, but this is just for development.
 
+### Project structure & file descriptions
+- `CONFIG.ini.default`: Contains default configuration files. This must be manually copied and renamed to "CONFIG.ini", which is then read by the installer.
+- `install`: Used to install/update the project. This is a binary version of `install.source.pl`, packaged using the "pp Perl Packer" and contains any prerequisite Perl modules used by the installer.
+- `install.source.pl`: Source code for the installer. Although this can be used directly (instead of `./install`), any prerequisite Perl modules must be manually installed first.
+- `modules`: Contains Perl dependencies used by the installer. These are not used once the project is installed, as the dependencies are all packaged into the binary `./install` installer. This is only present for development purposes.
+- `scripts`: Contains the scripts that do all the actual work. During installation, these get copied to their install destination, probably /usr/local/bin/vsphereAutomaton/.
+    - `DRSGroupMgmt.ps1`: PowerShell script which performs the automated DRS group management. This gets called by `DRSGroupMgmt.py`.
+    - `DRSGroupMgmt.py`: Wrapper script which retrieves credentials from the *vsphereAutomationCredentialServer* service and then calls `DRSGroupMgmt.ps1`.
+    - `credentialServer.py`: Runs as a systemd service. Requests a password from the user at start, and then services the password when requested via a Unix socket.
+    - `snapshotReport.ps1`: PowerShell script which performs the snapshot report. This gets called by `snapshotReport.py`.
+    - `snapshotReport.py`: Wrapper script which retrieves credentials from the *vsphereAutomationCredentialServer* service and then calls `snapshotReport.ps1`.
+- `systemd`: Contains the systemd unit files. Everything in this directory gets copied to `/etc/systemd/system` upon installation.
+    - `vsphereAutomationCredentialServer.service`: Responsible for running `credentialServer.py`. Runs continuously.
+    - `vsphereDRSGroupMgmt.service`: Responsible for running `DRSGroupMgmt.py`. Only runs when started by the associated systemd timer, and stops after running.
+    - `vsphereDRSGroupMgmt.timer`: Starts the associated systemd service on a schedule.
+    - `vsphereSnapshotReport.service`: Responsible for running `snapshotReport.py`. Only runs when started by the associated systemd timer, and stops after running.
+    - `vsphereSnapshotReport.timer`: Starts the associated systemd service on a schedule.
+- `test.pl`: Used for testing perl code, not important to the project.
+- `test.py`: Used for testing python code, not important to the project.
+
 ## Known Issues
 - [Every time the PowerShell scripts run they print a lot of ugly messages to journalctl](https://cc-gitlab.confederationcollege.ca/techservices/vsphereautomationscripts/-/issues/9). This does not impact the operation though.
