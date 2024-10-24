@@ -67,9 +67,9 @@ Configurable options are specified in the CONFIG.ini file. During installation `
 
 The meat of the installation consists of copying the systemd files and associated scripts to the proper locations on the filesystem (/etc/systemd/system and /usr/local/bin/vsphereAutomation).
 
-The installer (`./install`) is just `install.pl` packaged as a binary using [pp - PAR Packager](https://metacpan.org/pod/pp). This is necessary because the script uses some third-party modules, and the easiest way to deal with this is to package it all up using pp.
+The installer (`./install`) is just `install.source.pl` packaged as a binary using [pp - PAR Packager](https://metacpan.org/pod/pp). This is necessary because the script uses some third-party modules, and the easiest way to deal with this is to package it all up using pp.
 
-Once pp is installed, packaging the installer is as simple as `pp -o install install.pl`. The modules used are also present in the `modules` directory, but this is just for development.
+Once pp is installed, packaging the installer is as simple as `pp -o install install.source.pl`. The modules used are also present in the `modules` directory, but this is just for development.
 
 ## Known Issues
 - [Every time the PowerShell scripts run they print a lot of ugly messages to journalctl](https://cc-gitlab.confederationcollege.ca/techservices/vsphereautomationscripts/-/issues/9). This does not impact the operation though.
