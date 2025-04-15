@@ -26,7 +26,7 @@ The install script copies all the necessary files (systemd services and scripts)
 Simply pull the repo again (`git pull`) and re-run `./install`. Your customized CONFIG.ini file will not be overwritten.
 
 ## Usage
-Mostly it should just run by itself. Because the password for the vSphere user is only stored in memory, after the server is rebooted (or the vsphereAutomationCredentialServer systemd server is restarted) the password must be re-entered.
+Mostly it should just run by itself. Because the password for the vSphere user is only stored in memory, after the server is rebooted (or the vsphereAutomationCredentialServer systemd unit is restarted) the password must be re-entered.
 
 To do this, SSH to the server and run `systemd-tty-ask-password-agent` to respond to the pending password request.
 
