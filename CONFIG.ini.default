@@ -2,4 +2,4 @@ vsphere_user=techutils@vsphere.local
 vsphere_address=cc-vmcentre.confederationc.on.ca
 smtp_server=mail.confederationc.on.ca
 email_from=techutils-shu@confederationc.on.ca
-email_to=jbadergr@confederationcollege.ca
+email_to=confederationtech@confederationcollege.ca
