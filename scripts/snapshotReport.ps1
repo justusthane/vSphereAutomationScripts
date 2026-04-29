@@ -15,5 +15,12 @@ catch {
   Send-MailMessage -SmtpServer $smtpServer -to $emailto -from $emailFrom -subject "Error: VMware Snapshot Report" -body "Invalid credentials provided for vSphere. Please SSH to $([Environment]::MachineName) and run systemctl restart vsphereAutomationCredentialServer to correct credentials."
   Throw $Error
 }
-$output = get-vm | select Name,@{l="SnapshotCount";e={$($_ | get-snapshot).Count}} | Where {$_.SnapshotCount -gt 0} | sort-object SnapshotCount -desc | convertto-html
+$output = get-vm | ForEach {
+	$snapshots = get-snapshot $_;
+	[PScustomObject]@{
+		Name = $_.Name;
+		SnapshotCount = $snapshots.Count;
+		OldestSnapshot = ($snapshots | sort-object Created | select -First 1).Created;
+	}
+	} | Where {$_.SnapshotCount -gt 0} | sort-object SnapshotCount -desc | convertto-html
 Send-MailMessage -SmtpServer $smtpServer -to $emailTo -from $emailFrom -body "$output" -BodyAsHtml -Subject "VMware Snapshot Report"
