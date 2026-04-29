@@ -22,5 +22,9 @@ $output = get-vm | ForEach {
 		SnapshotCount = $snapshots.Count;
 		OldestSnapshot = ($snapshots | sort-object Created | select -First 1).Created;
 	}
-	} | Where {$_.SnapshotCount -gt 0} | sort-object SnapshotCount -desc | convertto-html
-Send-MailMessage -SmtpServer $smtpServer -to $emailTo -from $emailFrom -body "$output" -BodyAsHtml -Subject "VMware Snapshot Report"
+	} | Where {$_.SnapshotCount -gt 0} | sort-object SnapshotCount -desc 
+
+If $output.Count -gt 0 {
+	$output = $output | convertto-html;
+	Send-MailMessage -SmtpServer $smtpServer -to $emailTo -from $emailFrom -body "$output" -BodyAsHtml -Subject "VMware Snapshot Report";
+}
